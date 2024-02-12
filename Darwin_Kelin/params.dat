@@ -1,4 +1,0 @@
-//world_length,p_type,shielding_material,shielding_thickness,gen_radius,test_number,sphere
-1.25*m,"spec","BoratedPolyethylene",50.*mm,330*mm,1.01*m,3y,"Clinder"
-1.25*m,"spec","Polyethylene",50.*mm,330*mm,1.01*m,3y,"Clinder"
-1.25*m,"spec","Water",50.*mm,330*mm,1.01*m,3y,"Clinder"
