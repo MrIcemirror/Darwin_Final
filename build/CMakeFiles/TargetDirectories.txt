@@ -1,0 +1,4 @@
+/home/mricemirror/Documents/Darwin_final1/Darwin_Purfication_System_1/build/CMakeFiles/rebuild_cache.dir
+/home/mricemirror/Documents/Darwin_final1/Darwin_Purfication_System_1/build/CMakeFiles/edit_cache.dir
+/home/mricemirror/Documents/Darwin_final1/Darwin_Purfication_System_1/build/CMakeFiles/Simulation.dir
+/home/mricemirror/Documents/Darwin_final1/Darwin_Purfication_System_1/build/CMakeFiles/Darwin_PS.dir

@@ -1,0 +1,20 @@
++++ shielding_material, thickness, gen_radius, gen_z test_number +++
+"Air",10.*mm,0.35*m,1.01*m,1644751
+"Water",10.*mm,0.35*m,1.01*m,1644751
+"Water",25.*mm,0.35*m,1.01*m,1644751
+"Water",50.*mm,0.35*m,1.01*m,1644751
+"Water",100.*mm,0.35*m,1.01*m,1644751
+"Water",200.*mm,0.35*m,1.01*m,1644751
+"Water",300.*mm,0.35*m,1.01*m,1644751
+"BoratedPolyethylene",10.*mm,0.35*m,1.01*m,1644751
+"BoratedPolyethylene",25.*mm,0.35*m,1.01*m,1644751
+"BoratedPolyethylene",50.*mm,0.35*m,1.01*m,1644751
+"BoratedPolyethylene",100.*mm,0.35*m,1.01*m,1644751
+"BoratedPolyethylene",200.*mm,0.35*m,1.01*m,1644751
+"BoratedPolyethylene",300.*mm,0.35*m,1.01*m,1644751
+"Polyethylene",10.*mm,0.35*m,1.01*m,1644751
+"Polyethylene",25.*mm,0.35*m,1.01*m,1644751
+"Polyethylene",50.*mm,0.35*m,1.01*m,1644751
+"Polyethylene",100.*mm,0.35*m,1.01*m,1644751
+"Polyethylene",200.*mm,0.35*m,1.01*m,1644751
+"Polyethylene",300.*mm,0.35*m,1.01*m,1644751

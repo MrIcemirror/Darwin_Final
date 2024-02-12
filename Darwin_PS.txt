@@ -1,0 +1,134 @@
+#include <iostream>
+#include <ctime>
+
+
+//Geant4 package
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "G4VisManager.hh"
+#include "G4VisExecutive.hh"
+#include "G4UIExecutive.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "G4PhysicalConstants.hh"
+
+//Darwin package
+#include "Darwin_PS_Construction.hh"
+#include "Darwin_PS_Generator_Cylinder.hh"
+#include "Darwin_PS_Generator_Sphere.hh"
+#include "Darwin_PS_DecayAction.hh"
+#include "Darwin_PS_PhysicsList.hh"
+
+using namespace std;
+int main(int argc, char** argv)
+{
+    G4int start = time(NULL);
+    G4double world_length = 1.25*m;
+    G4String shielding_material_name = shielding_material_python;
+    G4double shielding_thickness = shielding_thickness_python;
+    G4double gen_radius = gen_radius_python;
+    G4double gen_z = gen_z_python;
+    G4String file_output = file_output_python;
+    int test_number = test_number_python;
+    G4String surface = "Cylinder";
+    G4int counts = 0;
+    G4String info_string = info_string_python;
+
+    //read neutron spectrum
+    std::vector<G4double> upper,lower,flux_prob;
+    std::ifstream spectrum("../neutron_spectrum.dat");
+    if(spectrum.is_open())
+    {
+        G4double value;
+        for (int i=0;i<3;i++)
+        {
+            std::string line;
+            getline(spectrum,line);
+            std::stringstream ss(line);
+
+            while(ss>>value)
+                if(i==1){upper.push_back(value);}
+                else if(i==0){lower.push_back(value);}
+                else{flux_prob.push_back(value);}
+        }
+    }
+    else
+    {
+        cerr << "Error: Neutron Spectrum File Is Incorrect"<<endl;
+        cerr << "Terminating the Program. "<< endl;
+        exit(1);
+    }
+
+    G4RunManager *runManager = new G4RunManager();
+    runManager->SetNumberOfThreads(8);
+    G4VUserDetectorConstruction *Construction =
+        new Darwin_PS_Construction(world_length,shielding_material_name,shielding_thickness);
+    runManager->SetUserInitialization(Construction);
+    runManager->SetUserInitialization(new Darwin_PS_PhysicsList);
+
+    G4VUserPrimaryGeneratorAction *Generator;
+    if(surface == "sphere")
+    {
+        Generator = new Darwin_PS_Generator_Sphere(gen_radius,upper,lower,flux_prob);
+    }
+
+    else if (surface=="Cylinder")
+    {
+        Generator = new Darwin_PS_Generator_Cylinder(gen_radius,gen_z,upper,lower,flux_prob);
+    }
+    
+    else
+    {
+        cerr << "Wrong Generation Surface" << endl;
+        cerr << "Terminating the Program" << endl;
+        exit(1);
+    }
+    runManager->SetUserAction(Generator);
+
+    Darwin_PS_DecayActivation *stepping = new Darwin_PS_DecayActivation(counts);
+    runManager->SetUserAction(stepping);
+    runManager->Initialize();
+
+    G4UImanager *UImanager = G4UImanager::GetUIpointer();
+	G4bool visual = false;
+	//Geometry test
+    string cmd0 = "/run/beamOn ";
+	if(visual)
+	{
+		G4UIExecutive *ui = new G4UIExecutive(argc, argv);
+		
+		G4VisManager *visManager = new G4VisExecutive();
+		visManager->Initialize();
+		UImanager->ApplyCommand("/process/had/enableCRCoalescence true");
+		UImanager->ApplyCommand("/vis/open OGL");
+		UImanager->ApplyCommand("/vis/viewer/set/viewpointVector 1 0 0");
+		UImanager->ApplyCommand("/vis/drawVolume");
+		UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true");
+		UImanager->ApplyCommand("/vis/scene/add/trajectories smooth");
+		ui->SessionStart();
+	}
+
+    else
+    {
+        ostringstream oss;
+        oss << cmd0 << test_number;
+        string cmd = oss.str();
+        cout << info_string;
+        UImanager->ApplyCommand(cmd);
+    }
+
+    std::fstream file(file_output,std::ios::app);
+    file << shielding_material_name << " " 
+         << shielding_thickness << " "
+         << test_number << " "
+         << counts << " "
+         << endl;
+    file.close();
+
+    G4int end = time(NULL);
+
+    cout << "Time cost is " << end-start << " seconds." << endl;
+
+    return 0;
+}
