@@ -5,7 +5,7 @@ import time
 ddn = time.perf_counter
 os.system("mkdir results")
 
-years = 2
+years = 5
 
 
 #------------------------------change Years-------------------------
@@ -19,6 +19,7 @@ for param_name in param_names:
 rest = 0
 finish_time = 0
 time0 = 360
+cc = 0
 
 with open("Darwin_PS.txt",'r') as run_text:
     origin_lines = run_text.readlines()
@@ -62,6 +63,8 @@ with open("Darwin_PS.txt",'r') as run_text:
                 end = ddn()
                 time0 = end-start
                 finish_time = finish_time+time0
+                cc = cc+1
+                time0 = finish_time/cc
                 rest = rest-1
 print("\n\n--------------================== Finished ==================--------------\n\n")
 
